@@ -1,0 +1,152 @@
+<div class="stock-container">
+  <!-- EDIT MODAL/PANEL -->
+  <div class="edit-panel" *ngIf="editingProduit() || isAdding()">
+    <h2 class="panel-title">{{ isAdding() ? 'Nouveau produit' : 'Modifier le produit' }}</h2>
+    <form [formGroup]="editForm" (ngSubmit)="save()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Désignation</label>
+          <input type="text" formControlName="designation" placeholder="Ex: Fer de 10">
+        </div>
+        <div class="form-group">
+          <label>Code</label>
+          <input type="text" formControlName="code" placeholder="Ex: COD-001">
+        </div>
+        <div class="form-group">
+          <label>Photo</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*">
+          <div *ngIf="editForm.get('photo')?.value" class="photo-preview">
+            <img [src]="editForm.get('photo')?.value" alt="Preview" style="max-height: 50px; margin-top: 5px;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Prix Unitaire</label>
+          <input type="number" formControlName="prixUnitaire" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Quantité en Stock</label>
+          <input type="number" formControlName="quantite" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Dernier Prix (Achat)</label>
+          <input type="number" formControlName="dernierPrix" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe Admin (Confirmation)</label>
+          <input type="password" formControlName="motDePasseAdmin" placeholder="Requis pour valider">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="cancelEdit()">Annuler</button>
+        <button type="submit" class="btn-save" [disabled]="editForm.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- HEADER / FILTERS -->
+  <div class="stock-header">
+    <div class="search-box">
+      <span class="search-ico">🔍</span>
+      <select [(ngModel)]="searchType" class="search-type-select" (change)="onSearchChange()">
+        <option value="designation">Désignation</option>
+        <option value="code">Par Code</option>
+      </select>
+      <input 
+        type="text" 
+        class="search-input" 
+        [placeholder]="searchType === 'code' ? 'Rechercher par code...' : 'Rechercher par désignation...'" 
+        [(ngModel)]="searchKeyword"
+        (input)="onSearchChange()">
+      <button class="btn-reset-search" *ngIf="searchKeyword" (click)="resetSearch()">✕</button>
+    </div>
+
+    <button class="btn-filter-critique" [class.active]="filterCritique()" (click)="toggleFilterCritique()">
+      <span>⚠️</span>
+      {{ filterCritique() ? 'Afficher tout le stock' : 'Stock Critique (≤ 5)' }}
+    </button>
+    
+    <button class="btn-save" *ngIf="isAdmin()" (click)="startAdd()">+ Ajouter Produit</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-glass">
+    <table>
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Produit</th>
+          <th>Code</th>
+          <th>Dernier prix</th>
+          <th>Prix (FCFA)</th>
+          <th>Quantité</th>
+          <th>Statut</th>
+          <th *ngIf="isAdmin()">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of produits()" [class.row-critical]="highlightStock() && p.quantite <= 5">
+          <td>
+            <div class="prod-photo-cell">
+              <img *ngIf="p.photo" [src]="p.photo" class="prod-thumb" alt="Photo" 
+                   (click)="toggleEnlarge(p.photo)"
+                   style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer;">
+              <span *ngIf="!p.photo" class="no-photo">🖼️</span>
+            </div>
+          </td>
+          <td>
+            <div class="prod-name">{{ p.designation }}</div>
+          </td>
+          <td><span class="prod-cat">{{ p.code }}</span></td>
+          <td><span class="prod-cat">{{ p.dernierPrix }}</span></td>
+          <td><strong>{{ p.prixUnitaire | number:'1.0-0' }}</strong></td>
+          <td><strong>{{ p.quantite }}</strong></td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-out': p.quantite <= 0,
+              'badge-low': p.quantite > 0 && p.quantite <= 5,
+              'badge-ok': p.quantite > 5
+            }">
+              {{ p.quantite <= 0 ? 'Rupture' : (p.quantite <= 5 ? 'Critique' : 'En stock') }}
+            </span>
+          </td>
+          <td *ngIf="isAdmin()">
+            <div class="actions-cell">
+              <button class="btn-action" title="Modifier" (click)="startEdit(p)">✏️</button>
+              <button class="btn-action" title="Supprimer" (click)="deleteProduit(p.idProduit)">🗑️</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="produits().length === 0">
+          <td colspan="6" class="empty">Aucun produit trouvé</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- PAGINATION -->
+    <div class="pagination-container" *ngIf="!isSearching()">
+      <div class="pagination-info">
+        Page <strong>{{ currentPage() + 1 }}</strong> sur <strong>{{ totalPages() }}</strong> 
+        ({{ totalElements() }} articles)
+      </div>
+      
+      <div class="pagination-jump">
+        <span>Aller à :</span>
+        <input type="number" [(ngModel)]="targetPage" (keyup.enter)="goToPage()" placeholder="..." class="jump-input">
+        <button class="btn-jump" (click)="goToPage()">➜</button>
+      </div>
+
+      <div class="pagination-controls">
+        <button class="btn-page" [disabled]="currentPage() === 0" (click)="onPageChange(currentPage() - 1)">Précédent</button>
+        <button class="btn-page" [disabled]="currentPage() >= totalPages() - 1" (click)="onPageChange(currentPage() + 1)">Suivant</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE OVERLAY -->
+  <div class="image-overlay" *ngIf="enlargedImage()" (click)="closeEnlarge()">
+    <div class="overlay-content" (click)="$event.stopPropagation()">
+      <img [src]="enlargedImage()" alt="Enlarged" class="enlarged-photo">
+      <button class="btn-close-overlay" (click)="closeEnlarge()">✕</button>
+    </div>
+  </div>
+</div>

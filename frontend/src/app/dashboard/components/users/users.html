@@ -1,0 +1,190 @@
+<div class="users-container">
+  <!-- LISTE DES UTILISATEURS -->
+  <div class="users-list-panel">
+    <div class="panel-header">
+      <h2>Utilisateurs</h2>
+      <button class="btn-add-explicit" [class.active]="showCreateForm" (click)="toggleCreateForm()">
+        {{ showCreateForm ? '✕ Fermer' : '+ Ajouter' }}
+      </button>
+    </div>
+
+    <div class="list-scroll">
+      <div 
+        class="user-item" 
+        *ngFor="let user of users" 
+        [class.active]="selectedUser?.idUsers === user.idUsers"
+        (click)="selectUser(user)">
+        
+        <div class="user-avatar">
+          {{ user.nom.charAt(0).toUpperCase() }}
+        </div>
+        
+        <div class="user-info">
+          <span class="user-nom">{{ user.nom }}</span>
+          <span class="user-role">{{ user.isAdmin ? 'Administrateur' : 'Vendeur' }}</span>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DÉTAILS / FORMULAIRE -->
+  <div class="users-detail-panel">
+    <!-- MODE CRÉATION -->
+    <ng-container *ngIf="showCreateForm">
+      <div class="detail-header">
+        <div class="big-avatar">+</div>
+        <div class="user-main-info">
+          <h2>Nouvel Utilisateur</h2>
+          <span class="status-pill" [class.admin]="newData.isAdmin">
+            {{ newData.isAdmin ? 'ADMIN' : 'VENDEUR' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <h3 class="section-title">Renseigner les informations</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nom complet</label>
+            <input type="text" [(ngModel)]="newData.nom" placeholder="Ex: Jean Dupont">
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" [(ngModel)]="newData.motDePasse" placeholder="••••••••">
+          </div>
+          <div class="form-group" style="justify-content: center;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" [(ngModel)]="newData.isAdmin">
+              Accès Administrateur
+            </label>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn-cancel" (click)="toggleCreateForm()">Annuler</button>
+          <button class="btn-save" (click)="onCreate()" [disabled]="!newData.nom || !newData.motDePasse">
+            Créer le compte
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- MODE ÉDITION -->
+    <ng-container *ngIf="selectedUser && !showCreateForm">
+      <div class="detail-header">
+        <div class="big-avatar">{{ selectedUser.nom.charAt(0).toUpperCase() }}</div>
+        <div class="user-main-info">
+          <h2>{{ selectedUser.nom }}</h2>
+          <span class="status-pill" [class.admin]="editData.isAdmin">
+            {{ editData.isAdmin ? 'ADMIN' : 'VENDEUR' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <label>Identifiant (ID)</label>
+          <p>{{ selectedUser.idUsers }}</p>
+        </div>
+        <div class="info-card">
+          <label>Dernière connexion</label>
+          <p>{{ selectedUser.derniereConnexion ? (selectedUser.derniereConnexion | date:'short') : 'Jamais' }}</p>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <h3 class="section-title">Modifier les informations</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nom complet</label>
+            <input type="text" [(ngModel)]="editData.nom" placeholder="Ex: Jean Dupont">
+          </div>
+          <div class="form-group">
+            <label>Nouveau Mot de passe (optionnel)</label>
+            <input type="password" [(ngModel)]="editData.motDePasse" placeholder="Laisser vide si inchangé">
+          </div>
+          <div class="form-group" style="justify-content: center;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" [(ngModel)]="editData.isAdmin">
+              Accès Administrateur
+            </label>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn-save" (click)="onPrepareUpdate()" [disabled]="!editData.nom">
+            Mettre à jour
+          </button>
+          <button class="btn-delete" (click)="onPrepareDelete()">
+            🗑️ Supprimer
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ÉTAT VIDE -->
+    <div class="empty-state" *ngIf="!selectedUser && !showCreateForm">
+      <div class="empty-icon">👥</div>
+      <h3>Gestion des Utilisateurs</h3>
+      <p>Sélectionnez un membre dans la liste pour voir ses détails ou en créer un nouveau.</p>
+    </div>
+
+    <!-- FEEDBACK MESSAGE -->
+    <div class="feedback-msg" [class.error]="isError" *ngIf="actionMessage">
+      {{ actionMessage }}
+    </div>
+
+    <!-- MODALS DE CONFIRMATION (ADMIN PASSWORD) -->
+    
+    <!-- Confirm Create -->
+    <div class="modal-overlay" *ngIf="showCreatePassConfirm">
+      <div class="custom-modal">
+        <div class="modal-header"><h3>Confirmation Admin</h3></div>
+        <p>Veuillez saisir votre mot de passe administrateur pour créer cet utilisateur.</p>
+        <input type="password" [(ngModel)]="adminPasswordForCreation" class="form-control" placeholder="Votre mot de passe">
+        <div class="modal-actions">
+          <button class="btn-cancel-modal" (click)="showCreatePassConfirm = false">Annuler</button>
+          <button class="btn-danger-confirm" (click)="confirmCreate()">Confirmer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Update (Admin rights) -->
+    <div class="modal-overlay" *ngIf="showAdminPassConfirm">
+      <div class="custom-modal">
+        <div class="modal-header"><h3>Droits Administrateur</h3></div>
+        <p>Mot de passe requis pour modifier les privilèges d'accès.</p>
+        <input type="password" [(ngModel)]="adminPasswordForPromotion" class="form-control" placeholder="Votre mot de passe">
+        <div class="modal-actions">
+          <button class="btn-cancel-modal" (click)="cancelUpdate()">Annuler</button>
+          <button class="btn-danger-confirm" (click)="confirmUpdate()">Confirmer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Delete (Simple) -->
+    <div class="modal-overlay" *ngIf="showDeleteConfirm">
+      <div class="custom-modal">
+        <div class="modal-header"><h3>Supprimer ?</h3></div>
+        <p>Êtes-vous sûr de vouloir supprimer <strong>{{ selectedUser?.nom }}</strong> ?</p>
+        <div class="modal-actions">
+          <button class="btn-cancel-modal" (click)="showDeleteConfirm = false">Annuler</button>
+          <button class="btn-danger-confirm" (click)="confirmDelete()">Supprimer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Delete (Admin) -->
+    <div class="modal-overlay" *ngIf="showDeleteAdminPassConfirm">
+      <div class="custom-modal">
+        <div class="modal-header"><h3>Supprimer un Admin</h3></div>
+        <p>Mot de passe requis pour supprimer un compte administrateur.</p>
+        <input type="password" [(ngModel)]="adminPasswordForDeletion" class="form-control" placeholder="Votre mot de passe">
+        <div class="modal-actions">
+          <button class="btn-cancel-modal" (click)="showDeleteAdminPassConfirm = false">Annuler</button>
+          <button class="btn-danger-confirm" (click)="confirmDelete()">Confirmer</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

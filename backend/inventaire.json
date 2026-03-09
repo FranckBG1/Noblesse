@@ -1,0 +1,788 @@
+{
+  "inventaire": [
+    {
+      "id_produit": 1,
+      "designation": "levier cuisine",
+      "prix_unitaire": 7500,
+      "quantite": 11,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 2,
+      "designation": "gaine 20/150",
+      "prix_unitaire": 14000,
+      "quantite": 0,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 3,
+      "designation": "gaine 25/150",
+      "prix_unitaire": 8000,
+      "quantite": 0,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 4,
+      "designation": "gaine 25/100",
+      "prix_unitaire": 15000,
+      "quantite": 0,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 5,
+      "designation": "pot de W.C.",
+      "prix_unitaire": 25000,
+      "quantite": 11,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 6,
+      "designation": "pot de chaux",
+      "prix_unitaire": 25000,
+      "quantite": 3,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 7,
+      "designation": "bardée de 160",
+      "prix_unitaire": 1500,
+      "quantite": 76,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 8,
+      "designation": "bardée de 130",
+      "prix_unitaire": 1000,
+      "quantite": 20,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 9,
+      "designation": "bardée de 100",
+      "prix_unitaire": 750,
+      "quantite": 8,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 10,
+      "designation": "couteau électrique",
+      "prix_unitaire": 300,
+      "quantite": 70,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 11,
+      "designation": "10 litres (xylamo)",
+      "prix_unitaire": 10000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 12,
+      "designation": "xylamo 5 litres",
+      "prix_unitaire": 5000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 13,
+      "designation": "xylamo 17 litres",
+      "prix_unitaire": 17000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 14,
+      "designation": "flinkote 5 litres",
+      "prix_unitaire": 20000,
+      "quantite": 2,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 15,
+      "designation": "douilles (48 cartouches de 20)",
+      "prix_unitaire": 20000,
+      "quantite": 363,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 16,
+      "designation": "tournevis américain",
+      "prix_unitaire": 20000,
+      "quantite": 92,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 17,
+      "designation": "pointes à tôle",
+      "prix_unitaire": 4000,
+      "quantite": 24,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 18,
+      "designation": "serrures Lincy",
+      "prix_unitaire": 10000,
+      "quantite": 5,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 19,
+      "designation": "serrure clef d’or",
+      "prix_unitaire": 7000,
+      "quantite": 4,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 20,
+      "designation": "serrures valoes",
+      "prix_unitaire": 7000,
+      "quantite": 4,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 21,
+      "designation": "serrure ARM",
+      "prix_unitaire": 10000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 22,
+      "designation": "poulie grand modèle",
+      "prix_unitaire": 5000,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 23,
+      "designation": "poulie moyen",
+      "prix_unitaire": 3500,
+      "quantite": 3,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 24,
+      "designation": "poulie petite",
+      "prix_unitaire": 2500,
+      "quantite": 4,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 25,
+      "designation": "pelles (bêchées)",
+      "prix_unitaire": 3000,
+      "quantite": 55,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 26,
+      "designation": "pelles (carrées)",
+      "prix_unitaire": 3000,
+      "quantite": 26,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 27,
+      "designation": "pelles (rondes)",
+      "prix_unitaire": 3000,
+      "quantite": 29,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 28,
+      "designation": "pioches",
+      "prix_unitaire": 3000,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 29,
+      "designation": "fil d’attaches",
+      "prix_unitaire": 1000,
+      "quantite": 197,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 30,
+      "designation": "siphon de sol",
+      "prix_unitaire": 1000,
+      "quantite": 41,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 31,
+      "designation": "marteaux (gros)",
+      "prix_unitaire": 1000,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 32,
+      "designation": "marteaux (moyen)",
+      "prix_unitaire": 1000,
+      "quantite": 17,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 33,
+      "designation": "seau maçon",
+      "prix_unitaire": 10000,
+      "quantite": 107,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 34,
+      "designation": "seau auxiliaire",
+      "prix_unitaire": 1000,
+      "quantite": 4,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 35,
+      "designation": "Tés culotte Ø110",
+      "prix_unitaire": 1500,
+      "quantite": 52,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 36,
+      "designation": "Tés culotte Ø63",
+      "prix_unitaire": 700,
+      "quantite": 24,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 37,
+      "designation": "coude Ø110",
+      "prix_unitaire": 2000,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 38,
+      "designation": "Té Ø63",
+      "prix_unitaire": 2000,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 39,
+      "designation": "Té Ø110",
+      "prix_unitaire": 2000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 40,
+      "designation": "anti-rouille 4 kg",
+      "prix_unitaire": 8000,
+      "quantite": 4,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 41,
+      "designation": "ficelles",
+      "prix_unitaire": 1000,
+      "quantite": 18,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 42,
+      "designation": "mesurettes 0.5 m orange",
+      "prix_unitaire": 1500,
+      "quantite": 8,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 43,
+      "designation": "mesurettes 7.5 m noir/jaune",
+      "prix_unitaire": 1500,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 44,
+      "designation": "mesurettes 7.5 m modulées",
+      "prix_unitaire": 1500,
+      "quantite": 27,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 45,
+      "designation": "mesurettes 10 m",
+      "prix_unitaire": 1500,
+      "quantite": 2,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 46,
+      "designation": "mesurettes 0.5 m mod. 75",
+      "prix_unitaire": 1500,
+      "quantite": 12,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 47,
+      "designation": "lunettes",
+      "prix_unitaire": 2500,
+      "quantite": 53,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 48,
+      "designation": "scotch blanc",
+      "prix_unitaire": 10000,
+      "quantite": 17,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 49,
+      "designation": "scotch jaune",
+      "prix_unitaire": 10000,
+      "quantite": 5,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 50,
+      "designation": "bande adhésive marron",
+      "prix_unitaire": 10000,
+      "quantite": 9,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 51,
+      "designation": "serpillière",
+      "prix_unitaire": 10000,
+      "quantite": 39,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 52,
+      "designation": "boîtiers bleu clair",
+      "prix_unitaire": 100,
+      "quantite": 18,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 53,
+      "designation": "boîtiers bleu foncé",
+      "prix_unitaire": 100,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 54,
+      "designation": "boîtiers rouge",
+      "prix_unitaire": 100,
+      "quantite": 61,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 55,
+      "designation": "cadenas (moyen)",
+      "prix_unitaire": 3000,
+      "quantite": 20,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 56,
+      "designation": "coffret modulaire",
+      "prix_unitaire": 3000,
+      "quantite": 9,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 57,
+      "designation": "grand coffret modulaire",
+      "prix_unitaire": 5000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 58,
+      "designation": "boîte dérivateur 06",
+      "prix_unitaire": 5000,
+      "quantite": 3,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 59,
+      "designation": "boîte dérivateur 08",
+      "prix_unitaire": 5000,
+      "quantite": 2,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 60,
+      "designation": "vernis marin 1 kg",
+      "prix_unitaire": 4500,
+      "quantite": 10,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 61,
+      "designation": "ampoule LED 40 W",
+      "prix_unitaire": 2000,
+      "quantite": 37,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 62,
+      "designation": "ampoule LED 20 W",
+      "prix_unitaire": 2000,
+      "quantite": 3,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 63,
+      "designation": "ampoule LED 30 W",
+      "prix_unitaire": 2000,
+      "quantite": 2,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 64,
+      "designation": "ampoule 50 W",
+      "prix_unitaire": 2000,
+      "quantite": 1,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 65,
+      "designation": "ampoule 10 W",
+      "prix_unitaire": 2000,
+      "quantite": 79,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 66,
+      "designation": "ampoule LED 15 W",
+      "prix_unitaire": 2000,
+      "quantite": 59,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 67,
+      "designation": "ampoule Aliya",
+      "prix_unitaire": 2000,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 68,
+      "designation": "ampoule D3 bras",
+      "prix_unitaire": 2000,
+      "quantite": 8,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 69,
+      "designation": "ampoule 04 bras",
+      "prix_unitaire": 2000,
+      "quantite": 3,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 70,
+      "designation": "ampoule Tomobœuf",
+      "prix_unitaire": 2000,
+      "quantite": 11,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 71,
+      "designation": "petite ampoule LED",
+      "prix_unitaire": 2000,
+      "quantite": 22,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 72,
+      "designation": "anciennes ampoules",
+      "prix_unitaire": 500,
+      "quantite": 50,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 73,
+      "designation": "peinture nationale 1 kg",
+      "prix_unitaire": 3500,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 74,
+      "designation": "super dégraisseur",
+      "prix_unitaire": 5000,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 75,
+      "designation": "acide chlorhydrique",
+      "prix_unitaire": 10000,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 76,
+      "designation": "mallette",
+      "prix_unitaire": 2000,
+      "quantite": 30,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 77,
+      "designation": "mallette 1 kg",
+      "prix_unitaire": 2500,
+      "quantite": 5,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 78,
+      "designation": "mallette 2 kg",
+      "prix_unitaire": 2500,
+      "quantite": 14,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 79,
+      "designation": "sachet rondelle",
+      "prix_unitaire": 500,
+      "quantite": 40,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 80,
+      "designation": "raclette de phase",
+      "prix_unitaire": 2500,
+      "quantite": 39,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 81,
+      "designation": "roulettes",
+      "prix_unitaire": 4500,
+      "quantite": 281,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 82,
+      "designation": "Sikaflex en sachet",
+      "prix_unitaire": 15000,
+      "quantite": 95,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 83,
+      "designation": "super 5 kg",
+      "prix_unitaire": 15000,
+      "quantite": 3,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 84,
+      "designation": "sulfalite 1 kg",
+      "prix_unitaire": 3000,
+      "quantite": 18,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 85,
+      "designation": "sulkalite 5 litres",
+      "prix_unitaire": 17000,
+      "quantite": 5,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 86,
+      "designation": "réduction 100-110/13",
+      "prix_unitaire": 1000,
+      "quantite": 35,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 87,
+      "designation": "barrette LOTO",
+      "prix_unitaire": 1500,
+      "quantite": 24,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 88,
+      "designation": "chiffon",
+      "prix_unitaire": 500,
+      "quantite": 40,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 89,
+      "designation": "scies manche orange",
+      "prix_unitaire": 3000,
+      "quantite": 19,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 90,
+      "designation": "scies manche noir",
+      "prix_unitaire": 3000,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 91,
+      "designation": "scies p. manche orange",
+      "prix_unitaire": 3000,
+      "quantite": 9,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 92,
+      "designation": "scies manche étroit PTM 2",
+      "prix_unitaire": 3000,
+      "quantite": 5,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 93,
+      "designation": "pointes de 2",
+      "prix_unitaire": 2500,
+      "quantite": 89,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 94,
+      "designation": "cale Ø99 G. modèle",
+      "prix_unitaire": 1500,
+      "quantite": 22,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 95,
+      "designation": "cale Ø99 P. modèle",
+      "prix_unitaire": 1500,
+      "quantite": 8,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 96,
+      "designation": "taloche G. modèle",
+      "prix_unitaire": 1000,
+      "quantite": 6,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 97,
+      "designation": "taloche moyen",
+      "prix_unitaire": 1000,
+      "quantite": 10,
+      "code": null,
+      "dernier_prix": null
+    },
+    {
+      "id_produit": 98,
+      "designation": "taloche P. modèle",
+      "prix_unitaire": 1000,
+      "quantite": 26,
+      "code": null,
+      "dernier_prix": null
+    }
+  ]
+}

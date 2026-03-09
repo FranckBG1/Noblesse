@@ -1,0 +1,82 @@
+<div class="dashboard-root">
+  <!-- MODERN BACKGROUND ANIMATION -->
+  <div class="bg-animation">
+    <canvas id="particleCanvas"></canvas>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div class="brand-text">
+          <div class="brand-title">ETS Noblesse</div>       
+          <div class="brand-subtitle">Gestionnaire</div>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <button 
+          *ngFor="let item of menuItems" 
+          class="menu-link" 
+          [class.active]="currentRoute === item.route"
+          (click)="navigateTo(item.route)"
+          type="button">
+          <span class="menu-ico">{{ item.icon }}</span>
+          <div class="menu-info">
+            <span class="menu-txt">{{ item.label }}</span>
+          </div>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="user-avatar">{{ userName.charAt(0) }}</div>
+          <div class="user-text">
+            <div class="user-name"><strong>{{ userName }}</strong> <span class="badge-online">connecté</span></div>
+            <div class="user-role">{{ userRole }}</div>
+          </div>
+          <span class="status-dot"></span>
+        </div>
+
+        <button class="btn-logout" type="button" (click)="logout()">
+          <span>Déconnexion</span>
+          <span class="logout-icon">↩</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb">
+            <span>Administration</span>
+            <span class="separator"> / </span>
+            <span class="current">{{ pageTitle }}</span>
+          </div>
+          <h1 class="page-title">{{ pageTitle }}</h1>
+        </div>
+
+        <div class="topbar-right">
+          <div class="date-display">
+            {{ today | date:'EEEE, d MMMM yyyy' }}
+          </div>
+        </div>
+      </header>
+
+      <section class="panel">
+        <app-stats *ngIf="currentRoute === 'stats'"></app-stats>
+        <app-facture *ngIf="currentRoute === 'facture'"></app-facture>
+        <app-vendre *ngIf="currentRoute === 'vendre'"></app-vendre>
+        <app-stock *ngIf="currentRoute === 'stock'"></app-stock>
+        <app-users *ngIf="currentRoute === 'users'"></app-users>
+        <app-history *ngIf="currentRoute === 'history'"></app-history>
+        <app-settings *ngIf="currentRoute === 'settings'"></app-settings>
+      </section>
+    </main>
+  </div>
+</div>

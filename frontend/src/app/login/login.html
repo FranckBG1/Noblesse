@@ -1,0 +1,69 @@
+<div class="login-container">
+  <div class="login-box">
+    <!-- Logo -->
+    <div class="login-header">
+      <div class="logo">N</div>
+      <h1>ETS Noblesse </h1>
+      <p>Gestion de Quincaillerie</p>
+    </div>
+
+    <!-- Formulaire -->
+    <form (ngSubmit)="onLogin()" class="login-form">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="identifiant">Identifiant</label>
+        <input
+          type="text"
+          id="identifiant"
+          [(ngModel)]="identifiant"
+          name="identifiant"
+          placeholder="identifiant"
+          class="input-field"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          class="input-field"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <!-- Erreur -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Bouton de connexion -->
+      <button
+        type="submit"
+        class="btn-login"
+        [disabled]="isLoading || isLocked"
+      >
+        <span *ngIf="isLoading">Connexion en cours...</span>
+        <span *ngIf="isLocked">Réessayez dans {{ remainingSeconds }}s</span>
+        <span *ngIf="!isLoading && !isLocked">Se connecter</span>
+      </button>
+    </form>
+
+    <!-- Lien oubli mot de passe -->
+    <div class="login-footer">
+      <button
+        type="button"
+        class="btn-link"
+        (click)="onForgotPassword()"
+        [disabled]="isLoading"
+      >
+        Mot de passe oublié ?
+      </button>
+    </div>
+  </div>
+</div>

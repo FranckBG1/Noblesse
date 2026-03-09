@@ -1,0 +1,148 @@
+<div class="vente-container">
+  <div class="vente-card">
+    <h2 class="card-title">🛒 Enregistrer une Vente</h2>
+
+    <!-- RECHERCHE PRODUIT -->
+    <div class="form-group">
+      <label>Rechercher par</label>
+      <div class="search-type-toggle">
+        <label>
+          <input type="radio" [(ngModel)]="searchType" value="designation" (change)="onSearchChange()"> Désignation
+        </label>
+        <label style="margin-left: 10px;">
+          <input type="radio" [(ngModel)]="searchType" value="code" (change)="onSearchChange()"> Code
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{ searchType === 'code' ? 'Code Produit' : 'Produit (Désignation)' }}</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [placeholder]="searchType === 'code' ? 'Entrez le code...' : 'Rechercher un produit...'" 
+        [(ngModel)]="searchKeyword"
+        (input)="onSearchChange()"
+        [class.is-invalid]="errorMessage && !selectedProduit">
+      
+      <!-- AUTOCOMPLETE -->
+      <ul class="search-results" *ngIf="searchResults.length > 0">
+        <li *ngFor="let p of searchResults" (click)="selectProduit(p)">
+          <strong>{{ p.designation }}</strong>
+          <small *ngIf="p.code"> ({{ p.code }})</small>
+          <small>Stock: {{ p.quantite }} | Prix: {{ p.prixUnitaire | number:'1.0-0' }} FCFA</small>
+        </li>
+      </ul>
+    </div>
+
+    <!-- PRIX ET QUANTITÉ -->
+    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <div class="form-group">
+        <label>Prix Unitaire (FCFA)</label>
+        <div class="input-group">
+          <input 
+            type="number" 
+            class="form-control" 
+            [(ngModel)]="prixVente" 
+            [disabled]="!isPrixModifiable">
+          <button class="btn-edit" (click)="toggleModifierPrix()" title="Modifier le prix">
+            {{ isPrixModifiable ? '🔓' : '🔒Rabais' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Quantité</label>
+        <input 
+          type="number" 
+          class="form-control" 
+          [(ngModel)]="quantite" 
+          (input)="checkStock()"
+          min="1">
+      </div>
+    </div>
+
+    <!-- REMISE -->
+    <div class="form-group">
+      <label>Remise (Optionnel)</label>
+      <input 
+        type="number" 
+        class="form-control" 
+        [(ngModel)]="remise" 
+        placeholder="Montant de la remise en FCFA">
+    </div>
+
+    <!-- TOTAL -->
+    <div class="total-panel">
+      <span class="total-label">Total à payer</span>
+      <span class="total-amount">{{ (prixVente * quantite) - remise | number:'1.0-0' }} FCFA</span>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <button class="btn-reset" (click)="resetForm()">Vider</button>
+      <button 
+        class="btn-submit" 
+        [disabled]="!searchKeyword || quantite < 1"
+        (click)="validerVente()">
+        Valider la Vente
+      </button>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="success-overlay" *ngIf="isVenteReussie">
+      <span>✅</span> {{ successMessage }}
+    </div>
+    <div class="error-msg" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMATION -->
+  <div class="modal-overlay" *ngIf="showConfirmation" (click)="cancelVente()">
+    <div class="modal-glass" (click)="$event.stopPropagation()">
+      <h3>Confirmer la Vente ?</h3>
+      
+      <div class="confirm-details">
+        <div class="detail-item">
+          <span>Produit:</span>
+          <strong>{{ selectedProduit ? selectedProduit.designation : searchKeyword }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Quantité:</span>
+          <strong>{{ quantite }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Prix Unitaire:</span>
+          <strong>{{ prixVente | number:'1.0-0' }} FCFA</strong>
+        </div>
+        <div class="detail-item" *ngIf="remise > 0">
+          <span>Remise:</span>
+          <strong style="color: #ef4444;">- {{ remise | number:'1.0-0' }} FCFA</strong>
+        </div>
+        <div class="detail-item detail-total">
+          <span>Total Final:</span>
+          <strong>{{ (prixVente * quantite) - remise | number:'1.0-0' }} FCFA</strong>
+        </div>
+      </div>
+
+      <div class="warning-box" *ngIf="isStockInsuffisant">
+        <span>⚠️</span>
+        Attention: Stock insuffisant ({{ selectedProduit.quantite }} restant).
+      </div>
+
+      <div class="warning-box" *ngIf="!selectedProduit">
+        <span>ℹ️</span>
+        Ce produit sera créé automatiquement avec un stock de 0.
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-close" (click)="cancelVente()">Annuler</button>
+        <button class="btn-confirm" (click)="confirmVente()" [disabled]="isLoading">
+          {{ isLoading ? 'Enregistrement...' : 'Confirmer la Vente' }}
+        </button>
+      </div>
+      
+      <!-- Feedback de réussite dans la modal si on veut, mais ici on ferme la modal après succès -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,351 @@
+<div class="facture-container">
+  <div class="header-actions">
+    <h2>Factures en cours</h2>
+    <button class="btn-create" (click)="openCreateDialog()">+ Faire une facture</button>
+  </div>
+
+  <div class="factures-grid">
+    <div class="facture-card" *ngFor="let f of facturesIncompletes()" (click)="openEditDialog(f)">
+      <div class="facture-header">
+        <span class="client-name">{{ f.nomClient }}</span>
+        <div class="actions">
+          <span class="type-badge" [class.depot]="f.typeFacture === 'DEPOT'">{{ f.typeFacture === 'DEPOT' ? 'DÉPÔT' : 'CLASSIQUE' }}</span>
+          <span class="status-badge">{{ f.status }}</span>
+          <button class="btn-delete" (click)="supprimerFacture(f, $event)">×</button>
+        </div>
+      </div>
+      <div class="facture-details">
+        <span>Créée le: {{ f.dateCreation | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span *ngIf="f.typeFacture !== 'DEPOT'">Articles: {{ f.ventes.length }}</span>
+        <span *ngIf="f.typeFacture !== 'DEPOT'">Total: {{ getTotalFacture(f) | number:'1.0-0' }} FCFA</span>
+        <span *ngIf="f.typeFacture === 'DEPOT'">Montant déposé: {{ f.avance || 0 | number:'1.0-0' }} FCFA</span>
+        <span *ngIf="f.typeFacture !== 'DEPOT'">Avance: {{ f.avance || 0 | number:'1.0-0' }} FCFA</span>
+        <span *ngIf="f.typeFacture !== 'DEPOT'">Reste: {{ f.reste || 0 | number:'1.0-0' }} FCFA</span>
+        <span *ngIf="f.explications" class="explications-text">📝 {{ f.explications }}</span>
+      </div>
+      <div class="ventes-list" *ngIf="f.typeFacture !== 'DEPOT' && f.ventes.length > 0">
+        <div class="vente-item" *ngFor="let v of f.ventes">
+          <span>({{ v.dateVente | date:'dd/MM' }}) {{ v.produit?.designation || v.nomProduitHorsStock }}</span>
+          <span>{{ v.quantite }} x {{ v.prixVente | number:'1.0-0' }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="no-factures" *ngIf="facturesIncompletes().length === 0">
+      Aucune facture enregistrée non terminée.
+    </div>
+  </div>
+
+  <div class="completed-section" *ngIf="isAdmin">
+    <div class="completed-header">
+      <h3>Factures Terminées</h3>
+      <div class="search-box">
+        <input type="text" [(ngModel)]="searchClient" (input)="onSearch()" placeholder="Chercher par nom de client...">
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="facture-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Articles</th>
+            <th>Caissier</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let f of facturesTerminees()" (click)="selectedFacture = f">
+            <td>{{ f.dateCreation | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td><strong>{{ f.nomClient }}</strong></td>
+            <td>{{ f.ventes.length }}</td>
+            <td><span class="issuer-badge">{{ f.utilisateur?.nom || 'N/A' }}</span></td>
+            <td>
+              <button class="btn-view-small">Détails</button>
+              <button class="btn-pdf-small" (click)="generatePDF(f); $event.stopPropagation()">📄 PDF</button>
+            </td>
+          </tr>
+          <tr *ngIf="facturesTerminees().length === 0">
+            <td colspan="4" class="empty-table">Aucune facture terminée trouvée.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="pagination" *ngIf="totalPages > 1">
+      <div class="pag-nav">
+        <button [disabled]="page === 0" (click)="prevPage()">Précédent</button>
+        <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
+        <button [disabled]="page === totalPages - 1" (click)="nextPage()">Suivant</button>
+      </div>
+      <div class="pag-go">
+        <input type="number" #pageInput placeholder="Aller à..." (keyup.enter)="goToPage(pageInput.value); pageInput.value=''">
+        <button (click)="goToPage(pageInput.value); pageInput.value=''">Go</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DÉTAIL FACTURE (READ ONLY) -->
+  <div class="modal-overlay" *ngIf="selectedFacture" (click)="selectedFacture = null">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ selectedFacture.typeFacture === 'DEPOT' ? 'Reçu de Dépôt' : 'Facture' }} - {{ selectedFacture.nomClient }}</h3>
+        <div class="modal-header-actions">
+          <button class="btn-pdf-modal" (click)="generatePDF(selectedFacture)">📄 Télécharger PDF</button>
+          <button class="close-btn" (click)="selectedFacture = null">×</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <p class="modal-info"><strong>Date :</strong> {{ selectedFacture.dateCreation | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p class="modal-info"><strong>Type :</strong> <span class="type-badge" [class.depot]="selectedFacture.typeFacture === 'DEPOT'">{{ selectedFacture.typeFacture === 'DEPOT' ? 'DÉPÔT' : 'CLASSIQUE' }}</span></p>
+          <p class="modal-info"><strong>Statut :</strong> <span class="badge-done">{{ selectedFacture.status }}</span></p>
+          <p class="modal-info"><strong>Émis par :</strong> {{ selectedFacture.utilisateur?.nom || 'N/A' }}</p>
+          <p class="modal-info" *ngIf="selectedFacture.client?.telephone"><strong>Tél :</strong> {{ selectedFacture.client?.telephone }}</p>
+        </div>
+        
+        <div *ngIf="selectedFacture.typeFacture === 'DEPOT'" class="depot-summary">
+          <h4>Montant déposé</h4>
+          <div class="depot-amount-display">
+            {{ selectedFacture.avance || 0 | number:'1.0-0' }} FCFA
+          </div>
+        </div>
+        
+        <table class="detail-table" *ngIf="selectedFacture.typeFacture !== 'DEPOT'">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Prix</th>
+              <th>Qte</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="selectedFacture">
+            <tr *ngFor="let v of selectedFacture.ventes">
+              <td>{{ v.produit?.designation || v.nomProduitHorsStock }}</td>
+              <td>{{ v.prixVente | number:'1.0-0' }}</td>
+              <td>{{ v.quantite }}</td>
+              <td><strong>{{ v.montantTotal | number:'1.0-0' }} FCFA</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIALOG -->
+  <div class="dialog-overlay" *ngIf="showDialog" (click)="closeDialog()">
+    <div class="dialog-content" (click)="$event.stopPropagation()">
+      <h3>{{ editingFacture ? 'Modifier la facture' : 'Nouvelle facture' }}</h3>
+      
+      <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+      
+      <!-- Toggle Type de Facture -->
+      <div class="form-group">
+        <label>Type de facture</label>
+        <div class="toggle-group">
+          <button 
+            class="toggle-btn" 
+            [class.active]="typeFacture === 'CLASSIQUE'"
+            (click)="typeFacture = 'CLASSIQUE'"
+            type="button">
+            Facture Classique
+          </button>
+          <button 
+            class="toggle-btn" 
+            [class.active]="typeFacture === 'DEPOT'"
+            (click)="typeFacture = 'DEPOT'"
+            type="button">
+            Facture de Dépôt
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Nom du client</label>
+        <div class="autocomplete-wrapper">
+          <input type="text" [(ngModel)]="nomClient" (input)="onClientNameChange(); onClientNameInput()" placeholder="Nom du client">
+          <div class="autocomplete-suggestions" *ngIf="clientSuggestions.length > 0">
+            <div class="suggestion-item" *ngFor="let client of clientSuggestions" (click)="selectClient(client)">
+              <div class="suggestion-main">
+                <strong>{{ client.nom }}</strong>
+                <span *ngIf="client.telephone" class="suggestion-phone"> - {{ client.telephone }}</span>
+              </div>
+              <div *ngIf="client.soldeDisponible && client.soldeDisponible > 0" class="suggestion-solde">
+                Solde: {{ client.soldeDisponible | number:'1.0-0' }} FCFA
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="typeFacture === 'DEPOT'">
+        <label>Montant du dépôt (FCFA)</label>
+        <input type="number" [(ngModel)]="avance" placeholder="Montant déposé" min="0">
+      </div>
+
+      <div class="form-group" *ngIf="typeFacture === 'CLASSIQUE'">
+        <label>
+          Avance (FCFA)
+          <span class="help-icon" *ngIf="editingFacture" title="L'avance représente le solde actuel du client. Si vous modifiez ce montant :
+• Pour une avance négative : Saisissez le nouveau total (ex: client doit -5000, il paie 2000 → saisissez -3000)
+• Pour une avance positive : Saisissez le nouveau total (ex: client a 10000, il ajoute 5000 → saisissez 15000)">ℹ️</span>
+        </label>
+        <input type="number" [(ngModel)]="avance" placeholder="Montant de l'avance" min="0">
+      </div>
+
+      <div class="form-group" *ngIf="editingFacture">
+        <label>Explications (optionnel)</label>
+        <textarea [(ngModel)]="explications" placeholder="Ajoutez des explications sur cette facture ou les modifications..." rows="3"></textarea>
+      </div>
+
+      <div class="sales-selection" *ngIf="typeFacture === 'CLASSIQUE'">
+        <div class="sales-header">
+          <h4>{{ viewSalesHistory ? 'Ventes du dernier mois' : 'Ventes de la journée' }} ({{ (viewSalesHistory ? ventesDernierMois() : ventesDuJour()).length }})</h4>
+          <button class="btn-toggle-history" (click)="toggleSalesHistory()">
+            {{ viewSalesHistory ? 'Voir ventes du jour' : 'Voir ventes du mois' }}
+          </button>
+        </div>
+        <div class="total-info" *ngIf="selectedVentesIds.length > 0">
+          <strong>Total sélectionné: {{ getTotalSelected() | number:'1.0-0' }} FCFA</strong>
+          <span *ngIf="avance > 0">| Reste: {{ getTotalSelected() - avance | number:'1.0-0' }} FCFA</span>
+        </div>
+        <div class="sales-list">
+          <div class="sale-item" *ngFor="let v of (viewSalesHistory ? ventesDernierMois() : ventesDuJour())" 
+               [class.selected]="isVenteSelected(v.idVente)" 
+               [class.disabled]="v.facture && v.facture.idFacture !== editingFacture?.idFacture"
+               (click)="v.facture && v.facture.idFacture !== editingFacture?.idFacture ? null : toggleVenteSelection(v.idVente)">
+            <div class="sale-info">
+              <strong>{{ v.produit ? v.produit.designation : v.nomProduitHorsStock }}</strong>
+              <small>{{ v.dateVente | date:'dd/MM HH:mm' }} - {{ v.quantite }} x {{ v.prixVente }} FCFA</small>
+              <div class="already-assigned" *ngIf="v.facture && v.facture.idFacture !== editingFacture?.idFacture">
+                Déjà affecté à: {{ v.facture.nomClient }}
+              </div>
+            </div>
+            <div class="selection-indicator">
+              <span *ngIf="v.facture && v.facture.idFacture !== editingFacture?.idFacture">🚫</span>
+              <span *ngIf="!(v.facture && v.facture.idFacture !== editingFacture?.idFacture)">
+                {{ isVenteSelected(v.idVente) ? '✅' : '○' }}
+              </span>
+            </div>
+          </div>
+          <div class="empty-sales" *ngIf="(viewSalesHistory ? ventesDernierMois() : ventesDuJour()).length === 0">
+            Aucune vente disponible
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="closeDialog()">Annuler</button>
+        <button class="btn-save" (click)="saveFacture(false)" [disabled]="typeFacture === 'CLASSIQUE' && selectedVentesIds.length === 0">Enregistrer (Pas terminé)</button>
+        <button class="btn-generate" (click)="saveFacture(true)" [disabled]="typeFacture === 'CLASSIQUE' && selectedVentesIds.length === 0">Générer la facture</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM DELETE DIALOG -->
+  <div class="dialog-overlay" *ngIf="showDeleteConfirm" (click)="cancelDelete()">
+    <div class="dialog-content confirm-dialog" (click)="$event.stopPropagation()">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer la facture de <strong>{{ factureToDelete?.nomClient }}</strong> ?</p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-delete-confirm" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RENDU CACHÉ POUR LA GÉNÉRATION DU PDF -->
+<div id="facture-to-print" class="facture-paper" *ngIf="factureToPrint">
+  <div class="facture-header">
+    <div class="entreprise">
+      <h2>ETS NOBLESSE CONSTRUCTION</h2>
+      <p>
+        Fabrication et vente parpaings de 20, 15, 12, 10, Balustres, Claustras, Poteaux,<br>
+        buses, pavés et autres.<br>
+        Vente de matériaux de construction, Sable & Gravier, Quincaillerie
+      </p>
+      <p>
+        N° Cont: M032115534910 <br>
+        Sis Base Razel Ebolowa <br>
+        Tel: 696 074 476 / 678 435 274
+      </p>
+    </div>
+    <div class="facture-info">
+      <div class="facture-box">
+        <span class="label">{{ factureToPrint.typeFacture === 'DEPOT' ? 'REÇU DE DÉPÔT' : 'FACTURE' }}</span>
+        <span class="numero">{{ factureToPrint.idFacture }}</span>
+      </div>
+      <div class="date">
+        Date : {{ factureToPrint.dateCreation | date:'dd/MM/yyyy' }}
+      </div>
+    </div>
+  </div>
+  <div class="client-row">
+    <strong>Nom du client :</strong> {{ factureToPrint.nomClient }}
+    <span *ngIf="factureToPrint.client?.telephone"> - Tel: {{ factureToPrint.client?.telephone }}</span>
+  </div>
+  
+  <!-- Facture de dépôt -->
+  <div *ngIf="factureToPrint.typeFacture === 'DEPOT'" class="depot-content">
+    <div class="depot-info">
+      <p>Nous accusons réception de la somme de :</p>
+      <div class="depot-amount">
+        <strong>{{ factureToPrint.avance || 0 | number:'1.0-0' }} FCFA</strong>
+      </div>
+      <p class="depot-words">{{ amountToWords(factureToPrint.avance || 0) }}</p>
+    </div>
+  </div>
+  
+  <!-- Facture classique -->
+  <div *ngIf="factureToPrint.typeFacture !== 'DEPOT'">
+    <table class="facture-table">
+      <thead>
+        <tr>
+          <th>QTE</th>
+          <th>DESIGNATION</th>
+          <th>PRIX UNIT.</th>
+          <th>PRIX TOTAL</th>
+          <th>DETAIL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of factureToPrint.ventes">
+          <td>{{ v.quantite }}</td>
+          <td>{{ v.produit?.designation || v.nomProduitHorsStock }}</td>
+          <td>{{ v.prixVente }}</td>
+          <td>{{ v.quantite * v.prixVente }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="payment-row">
+      <div class="payment-details">
+        <div>Remise : {{ getRemiseTotal(factureToPrint) }}</div>
+        <div>Avance : {{ factureToPrint.avance || 0 | number:'1.0-0' }} FCFA</div>
+        <div class="reste-highlight">Reste à payer: {{ factureToPrint.reste || 0 | number:'1.0-0' }} FCFA</div>
+      </div>
+      <div>
+        Payable le : __________
+      </div>
+    </div>
+    <div class="total-row">
+      <div class="arrete">
+        Arrêté la présente facture à la somme de : <strong>{{ amountToWords(getTotalFacture(factureToPrint)) }}</strong>
+      </div>
+      <div class="total-box">
+        TOTAL : {{ getTotalFacture(factureToPrint) }} FCFA
+      </div>
+    </div>
+  </div>
+  
+  <div class="signature-row">
+    <div>
+      Signature du Client
+    </div>
+    <div>
+      Signature du vendeur
+    </div>
+  </div>
+</div>
